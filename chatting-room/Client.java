@@ -1,12 +1,29 @@
 import java.net.*;
+import java.awt.event.KeyEvent;
+import java.awt.event.KeyListener;
+import javax.swing.BorderFactory;
+import javax.swing.ImageIcon;
+import javax.swing.JFrame;
+import javax.swing.JLabel;
+import javax.swing.JTextArea;
+import javax.swing.JTextField;
+import javax.swing.SwingConstants;
+
+import java.awt.BorderLayout;
+import java.awt.Font;
 import java.io.*;
 
-class Client{
+public class Client extends JFrame{
 
 
     Socket socket;
     BufferedReader br;//input stream
     PrintWriter out; //output stream
+
+    private JLabel heading = new JLabel("Client Area");
+    private JTextArea messageArea = new JTextArea();
+    private JTextField messageInput = new JTextField();
+    private Font font = new Font("Roboto",Font.PLAIN,20);
 
     public Client(){
         try{
@@ -19,12 +36,71 @@ class Client{
             //to fetch output
             out = new PrintWriter(socket.getOutputStream());
 
+
+            createGUI();
+
+            handleEvents();
             startReading();
             startWriting();
         }catch(Exception e){
             
         }
     }
+    private void handleEvents(){
+        messageInput.addKeyListener(new KeyListener() {
+
+            @Override
+            public void keyPressed(KeyEvent e) {
+                // TODO Auto-generated method stub
+                throw new UnsupportedOperationException("Unimplemented method 'keyPressed'");
+            }
+
+            @Override
+            public void keyReleased(KeyEvent e) {
+                // TODO Auto-generated method stub
+                throw new UnsupportedOperationException("Unimplemented method 'keyReleased'");
+            }
+
+            @Override
+            public void keyTyped(KeyEvent e) {
+                // TODO Auto-generated method stub
+                throw new UnsupportedOperationException("Unimplemented method 'keyTyped'");
+            }
+            
+        });
+    }
+
+    private void createGUI(){
+        this.setTitle("Client Messager[END]");
+        this.setSize(600,700);
+        this.setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
+        this.setLocationRelativeTo(null);
+        this.setVisible(true);
+
+
+        //coding for component 
+        heading.setFont(font);
+        messageArea.setFont(font);
+        messageInput.setFont(font);
+        heading.setIcon(new ImageIcon("/icons/icons8-message-100.png"));
+        heading.setHorizontalTextPosition(SwingConstants.CENTER);
+        heading.setVerticalTextPosition(SwingConstants.CENTER);
+        heading.setVerticalTextPosition(SwingConstants.BOTTOM);
+        heading.setHorizontalAlignment(SwingConstants.CENTER);
+        heading.setBorder(BorderFactory.createEmptyBorder(20, 20, 20, 20));
+        messageInput.setHorizontalAlignment(SwingConstants.CENTER);
+
+
+        //frame layout set
+        this.setLayout(new BorderLayout());
+        //adding components to frame
+        this.add(heading,BorderLayout.NORTH);
+        this.add(messageArea,BorderLayout.CENTER);
+        this.add(messageInput,BorderLayout.SOUTH);
+
+        heading.setLayout(new BorderLayout());
+    }
+
     public void startReading(){
         //thread 1: to read data(
         Runnable r1=()->{ //lambda expression
