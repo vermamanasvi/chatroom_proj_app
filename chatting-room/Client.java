@@ -5,21 +5,21 @@ import javax.swing.BorderFactory;
 import javax.swing.ImageIcon;
 import javax.swing.JFrame;
 import javax.swing.JLabel;
+import javax.swing.JOptionPane;
+import javax.swing.JScrollPane;
 import javax.swing.JTextArea;
 import javax.swing.JTextField;
 import javax.swing.SwingConstants;
-
 import java.awt.BorderLayout;
 import java.awt.Font;
 import java.io.*;
 
 public class Client extends JFrame{
-
-
     Socket socket;
     BufferedReader br;//input stream
     PrintWriter out; //output stream
 
+    //Declaring componenets
     private JLabel heading = new JLabel("Client Area");
     private JTextArea messageArea = new JTextArea();
     private JTextField messageInput = new JTextField();
@@ -52,19 +52,27 @@ public class Client extends JFrame{
             @Override
             public void keyPressed(KeyEvent e) {
                 // TODO Auto-generated method stub
-                throw new UnsupportedOperationException("Unimplemented method 'keyPressed'");
+                
             }
 
             @Override
             public void keyReleased(KeyEvent e) {
                 // TODO Auto-generated method stub
-                throw new UnsupportedOperationException("Unimplemented method 'keyReleased'");
+                if(e.getKeyCode()==10){
+                    // System.out.println("you have pressed enter button");
+                    String contentToSend=messageInput.getText();
+                    messageArea.append("Me" + contentToSend+"\n");
+                    out.println(contentToSend);
+                    out.flush();
+                    messageInput.setText("");
+                    messageInput.requestFocus();
+                }
             }
 
             @Override
             public void keyTyped(KeyEvent e) {
                 // TODO Auto-generated method stub
-                throw new UnsupportedOperationException("Unimplemented method 'keyTyped'");
+                
             }
             
         });
@@ -88,6 +96,7 @@ public class Client extends JFrame{
         heading.setVerticalTextPosition(SwingConstants.BOTTOM);
         heading.setHorizontalAlignment(SwingConstants.CENTER);
         heading.setBorder(BorderFactory.createEmptyBorder(20, 20, 20, 20));
+        messageArea.setEditable(false);
         messageInput.setHorizontalAlignment(SwingConstants.CENTER);
 
 
@@ -97,8 +106,10 @@ public class Client extends JFrame{
         this.add(heading,BorderLayout.NORTH);
         this.add(messageArea,BorderLayout.CENTER);
         this.add(messageInput,BorderLayout.SOUTH);
+        JScrollPane jScrollPane=new JScrollPane(messageArea);
 
         heading.setLayout(new BorderLayout());
+        this.setVisible(true);
     }
 
     public void startReading(){
@@ -110,10 +121,13 @@ public class Client extends JFrame{
                         String msg = br.readLine();
                         if(msg.equals("exit")){
                             System.out.println("Server terminated chat");
+                            JOptionPane.showMessageDialog(this, "Server Terminanted the chat");
+                            messageInput.setEnabled(false);
                             socket.close();
                             break;
                         }
                         System.out.println("Server : " + msg);   
+                        messageArea.append("Server : "+ msg + "\n");
                     }
               
             }catch(Exception e){
@@ -123,7 +137,6 @@ public class Client extends JFrame{
         };
         new Thread(r1).start();//thread obj intialization
     }
-
     public void startWriting(){
         //thread 2: user intake data and send it to client
         System.out.println("typing...   ");
@@ -148,8 +161,6 @@ public class Client extends JFrame{
             };
             new Thread(r2).start();
     }
-
-
     public static void main(String[] args){
         System.out.println("This is Client.");
         new Client();
