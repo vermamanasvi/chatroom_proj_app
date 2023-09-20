@@ -40,8 +40,10 @@ public class Client extends JFrame{
             createGUI();
 
             handleEvents();
+
             startReading();
-            startWriting();
+
+           // startWriting();
         }catch(Exception e){
             
         }
@@ -61,7 +63,7 @@ public class Client extends JFrame{
                 if(e.getKeyCode()==10){
                     // System.out.println("you have pressed enter button");
                     String contentToSend=messageInput.getText();
-                    messageArea.append("Me" + contentToSend+"\n");
+                    messageArea.append("Me: " + contentToSend+"\n");
                     out.println(contentToSend);
                     out.flush();
                     messageInput.setText("");
@@ -79,7 +81,7 @@ public class Client extends JFrame{
     }
 
     private void createGUI(){
-        this.setTitle("Client Messager[END]");
+        this.setTitle("Client Messager[END]"); 
         this.setSize(600,700);
         this.setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
         this.setLocationRelativeTo(null);
@@ -90,11 +92,12 @@ public class Client extends JFrame{
         heading.setFont(font);
         messageArea.setFont(font);
         messageInput.setFont(font);
-        heading.setIcon(new ImageIcon("/icons/icons8-message-100.png"));
-        heading.setHorizontalTextPosition(SwingConstants.CENTER);
-        heading.setVerticalTextPosition(SwingConstants.CENTER);
-        heading.setVerticalTextPosition(SwingConstants.BOTTOM);
+
         heading.setHorizontalAlignment(SwingConstants.CENTER);
+        heading.setIcon(new ImageIcon("icons8-message-100.png"));
+        heading.setHorizontalTextPosition(SwingConstants.CENTER);
+        
+        heading.setVerticalTextPosition(SwingConstants.BOTTOM);      
         heading.setBorder(BorderFactory.createEmptyBorder(20, 20, 20, 20));
         messageArea.setEditable(false);
         messageInput.setHorizontalAlignment(SwingConstants.CENTER);
@@ -104,10 +107,10 @@ public class Client extends JFrame{
         this.setLayout(new BorderLayout());
         //adding components to frame
         this.add(heading,BorderLayout.NORTH);
-        this.add(messageArea,BorderLayout.CENTER);
-        this.add(messageInput,BorderLayout.SOUTH);
         JScrollPane jScrollPane=new JScrollPane(messageArea);
-
+        this.add(jScrollPane,BorderLayout.CENTER);
+        this.add(messageInput,BorderLayout.SOUTH);
+        
         heading.setLayout(new BorderLayout());
         this.setVisible(true);
     }
@@ -126,7 +129,7 @@ public class Client extends JFrame{
                             socket.close();
                             break;
                         }
-                        System.out.println("Server : " + msg);   
+                        //System.out.println("Server : " + msg);   
                         messageArea.append("Server : "+ msg + "\n");
                     }
               
