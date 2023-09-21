@@ -81,7 +81,7 @@ public class Client extends JFrame{
     }
 
     private void createGUI(){
-        this.setTitle("Client Messager[END]"); 
+        this.setTitle("Client Messager"); 
         this.setSize(600,700);
         this.setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
         this.setLocationRelativeTo(null);
@@ -155,7 +155,6 @@ public class Client extends JFrame{
                         socket.close();
                         break;
                     }
-                    
                 }
                 System.out.println("Connection closed");
             }catch (Exception e){
